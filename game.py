@@ -29,15 +29,14 @@ class Game(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()
-
-        if self.direction:
-            self.character.center_x += 1
-        else:
-            self.character.center_x -= 1
-        self.cherry.center_y -= 1
-
         self.character.draw()
         self.cherry.draw()
+
+        if self.direction and self.character.center_x + self.character.width // 2 < WINDOW_LEN:
+            self.character.center_x += 1
+        elif self.character.center_x - self.character.width // 2 > 0:
+            self.character.center_x -= 1
+        self.cherry.center_y -= 1
 
     def on_key_press(self, symbol: int, modifiers: int):
         if symbol == arcade.key.RIGHT:
@@ -46,21 +45,6 @@ class Game(arcade.Window):
         else:
             self.character.turn_left(theta=180)
             self.direction = False
-
-    def die(self):
-        self.character = arcade.Sprite(
-            "images/pacman/Pacman_Death_01.png",
-            center_x=WINDOW_LEN // 2,
-            center_y=self.character.center_y,
-            scale=4
-        )
-        time.sleep(0.5)
-        self.character = arcade.Sprite(
-            "images/pacman/Pacman_Death_02.png",
-            center_x=WINDOW_LEN // 2,
-            center_y=self.character.center_y,
-            scale=4
-        )
 
 
 def map_position(x):
