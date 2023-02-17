@@ -1,4 +1,4 @@
-# Pac Man Starter Code
+# Girls Hack Starter Code
 
 ### Installation Instructions
 
