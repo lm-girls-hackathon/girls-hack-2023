@@ -1,16 +1,20 @@
 import arcade
-import time
 
 WINDOW_LEN = 512
-BOARD_LEN = 64
-SQUARE_LEN = WINDOW_LEN // BOARD_LEN
 
 
 class Game(arcade.Window):
     def __init__(self):
-        super().__init__(WINDOW_LEN, WINDOW_LEN, "Pac Man")
-        arcade.set_background_color(arcade.color.ASH_GREY)
-        self.direction = True
+        super().__init__(WINDOW_LEN, WINDOW_LEN, "Girls Hackathon")  # set up a screen with this width/length and title
+        arcade.set_background_color(arcade.color.ASH_GREY)  # there are many colors to choose from!
+        self.direction = True  # True if the character is moving forwards, False if moving backwards
+
+        self.cherry = arcade.Sprite(
+            "images/objects/Fruit_Cherry.png",  # path to the image you want your sprite to appear as
+            center_x=WINDOW_LEN // 2,  # position on screen
+            center_y=WINDOW_LEN,
+            scale=4  # how big? scales less than 1 will make the sprite smaller
+        )
 
         self.character = arcade.Sprite(
             "images/pacman/Pacman_right.png",
@@ -18,21 +22,29 @@ class Game(arcade.Window):
             scale=4,
         )
 
-        self.cherry = arcade.Sprite(
-            "images/objects/Fruit_Cherry.png",
-            center_x=WINDOW_LEN // 2,
-            center_y=WINDOW_LEN,
-            scale=4
-        )
-
         self.character.center_y = self.character.height // 2
 
-    def on_draw(self):
+    def on_draw(self):  # this function is called many times per second to display your screen
         arcade.start_render()
-        self.character.draw()
+
+        self.character.draw()  # use the .draw() method to draw a sprite, otherwise it won't show up
         self.cherry.draw()
 
-        if self.direction and self.character.center_x + self.character.width // 2 < WINDOW_LEN:
+        arcade.draw_text(  # this is how you draw text on the screen!
+            "Welcome to my game!",
+            start_x=WINDOW_LEN // 2,
+            start_y=WINDOW_LEN // 2,
+            color=arcade.color.AIR_FORCE_BLUE,
+            font_size=20,
+            font_name="Kenney Blocks",
+            anchor_x="center",
+        )
+
+        if self.character.collides_with_sprite(self.cherry):
+            pass  # this is how you tell if two sprites are touching each other!
+
+        # update the position of your sprites!
+        if self.direction and self.character.center_x + self.character.width // 2 < WINDOW_LEN:  # checks that the sprite is not going off of the screen
             self.character.center_x += 1
         elif self.character.center_x - self.character.width // 2 > 0:
             self.character.center_x -= 1
@@ -46,10 +58,3 @@ class Game(arcade.Window):
             self.character.turn_left(theta=180)
             self.direction = False
 
-
-def map_position(x):
-    return x * SQUARE_LEN
-
-
-def map_coord(x):
-    return x // SQUARE_LEN
